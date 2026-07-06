@@ -1,0 +1,25 @@
+What is Networking?
+Networking is the process of connecting two or more devices so they can communicate and share data.
+
+How Networking Works
+User---DNS---IP---Server
+
+
+OSI Model
+
+Layer   Name         | Function                              | Example               
+ 7      Application  | User-facing network services          | HTTP, HTTPS, FTP      
+ 6      Presentation | Data translation and encryption       | SSL/TLS, JPEG         
+ 5      Session      | Starts, maintains, ends sessions      | NetBIOS               
+ 4      Transport    | Reliable delivery and error checking  | TCP, UDP              
+ 3      Network      | Routing using IP addresses            | IP, ICMP              
+ 2      Data Link    | Communication within the same network | Ethernet, MAC         
+ 1      Physical     | Transmits raw bits over the medium    | Cables, Wi-Fi signals 
+
+
+TCP/IP Model (4 Layers)
+
+Application	     HTTP, HTTPS, FTP, SMTP,     DNS	User services
+Transport	       TCP, UDP	                   End-to-end communication
+Internet	       IP, ICMP	                   Routing between networks
+Network Access	 Ethernet, Wi-Fi	           Sending data over the physical network
