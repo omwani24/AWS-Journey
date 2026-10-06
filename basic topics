@@ -1,0 +1,115 @@
+# AWS Cloud Learning Journey
+
+This repository documents my hands-on learning journey in **Networking, Linux, and AWS**.
+
+## 1. Networking
+
+### Topics Learned
+- What is Networking
+- How Networking works
+- OSI Model
+- TCP/IP Model
+- TCP vs UDP
+- HTTP vs HTTPS
+- IP Address
+- Public IP vs Private IP
+- DNS
+- DHCP
+- NAT
+- Router
+- Ports
+- SSH
+
+### Key Learning
+Understanding networking helped me learn how devices communicate and how networking concepts are used in cloud environments.
+
+---
+
+## 2. Linux
+
+### Topics Learned
+- Linux fundamentals
+- Linux file system
+- File and directory management
+- Creating, copying, moving and deleting files
+- File permissions
+- `chmod`
+- Users and groups
+- SSH
+- Basic process management
+
+### Commands Practiced
+
+```bash
+pwd
+ls
+cd
+mkdir
+touch
+cp
+mv
+rm
+cat
+chmod
+```
+
+### Key Learning
+Linux helped me understand how servers are managed using the command line and how files, directories and permissions work.
+
+---
+
+## 3. AWS EC2
+
+### Topics Practiced
+- Launching an EC2 instance
+- Selecting an AMI
+- Choosing an instance type
+- Creating Key Pairs
+- Security Groups
+- Port 22 / SSH
+- Connecting to EC2 using SSH
+- Public IP and Private IP
+- Working with Ubuntu Linux on EC2
+- Managing files on an EC2 server
+
+### SSH Example
+
+```bash
+ssh -i "key.pem" ubuntu@<PUBLIC-IP>
+```
+
+### Key Learning
+EC2 gave me practical experience with launching and managing a cloud-based Linux server.
+
+---
+
+## 4. Amazon S3
+
+### Topics Practiced
+- Creating an S3 bucket
+- Understanding buckets and objects
+- Uploading files
+- Downloading files
+- Deleting objects
+- Bucket permissions
+- Public and private access
+- Basic S3 storage concepts
+
+### Key Learning
+S3 helped me understand how data and files are stored and managed in AWS cloud storage.
+
+---
+
+## Learning Areas
+
+```text
+Networking
+    ↓
+Linux
+    ↓
+AWS EC2
+    ↓
+Amazon S3
+```
+
+> **Learn → Practice → Build → Improve**
