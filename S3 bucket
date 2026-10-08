@@ -1,0 +1,71 @@
+# AWS Learning Log 
+
+## 📚 Topics Studied
+
+Today I studied and practiced the following AWS and networking concepts:
+
+### ☁️ 1. Amazon S3 Storage
+- Understood what **Amazon S3 (Simple Storage Service)** is.
+- Learned how S3 stores data as **objects inside buckets**.
+- Learned about:
+  - S3 Buckets
+  - Objects
+  - Object keys
+  - Storage classes
+  - Bucket permissions
+  - Object permissions
+- Practiced uploading, downloading, and managing objects in an S3 bucket.
+
+### 🔐 2. IAM & Permission Policies
+- Learned how **AWS IAM (Identity and Access Management)** controls access to AWS resources.
+- Understood the difference between:
+  - IAM Users
+  - IAM Groups
+  - IAM Roles
+  - IAM Policies
+- Learned how to create permissions for specific AWS services.
+- Studied how to provide access to a **specific S3 bucket** instead of giving unnecessary permissions.
+- Understood the importance of the **Principle of Least Privilege**.
+
+### 📦 3. Handling S3 Objects
+Practiced understanding how to:
+- Upload objects
+- Download objects
+- Delete objects
+- View objects
+- Control access to objects
+- Apply permissions to S3 resources
+
+### 🌐 4. Networking & IP Addresses
+Studied how networking works and how devices communicate with each other.
+
+Topics covered:
+- Network basics
+- IP addresses
+- Private IP
+- Public IP
+- Router
+- DHCP
+- NAT
+- How devices communicate over a network
+- How AWS resources communicate using networking and IP addresses
+
+### 🧠 Key Learning
+
+Today I understood that **AWS services are not isolated**. Storage, permissions, and networking work together.
+
+For example:
+
+**User → IAM Permission → S3 Bucket → S3 Object**
+
+And for networking:
+
+**Client → Router/NAT → Network → AWS Resource**
+
+## 🎯 Practical Understanding
+
+I am now getting a better understanding of how to securely access AWS resources, manage S3 storage, control permissions using IAM policies, and understand how IP addresses and networking work.
+
+## 🚀 Next Step
+
+Continue practicing AWS hands-on by working with **S3, IAM, EC2 and networking**, and gradually combine these services into real-world cloud projects.
