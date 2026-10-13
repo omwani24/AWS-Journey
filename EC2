@@ -1,0 +1,127 @@
+# AWS Learning Log — EC2, S3, and Web Servers
+
+## Overview
+
+Today, I learned the fundamentals of Amazon EC2, EC2 instance families, purchasing options, Spot Instances, Amazon S3, application servers, web servers, networking ports, and storage differences between Linux and Windows.
+
+## 1. Amazon EC2 (Elastic Compute Cloud)
+
+Amazon EC2 is an AWS service that provides virtual servers in the cloud. These servers can run operating systems, host websites, deploy applications, and perform computing tasks.
+
+### EC2 Instance Families
+
+- **General Purpose:** Balanced CPU, memory, and networking.
+- **Compute Optimized:** Designed for CPU-intensive workloads.
+- **Memory Optimized:** Suitable for applications requiring large amounts of RAM.
+- **Storage Optimized:** Designed for workloads requiring high storage performance.
+- **Accelerated Computing:** Uses GPUs or specialized hardware for AI, machine learning, and graphics processing.
+
+### EC2 Components
+
+- **AMI:** A template used to launch an EC2 instance.
+- **Instance Type:** Defines the available computing resources.
+- **CPU and RAM:** Provide processing power and temporary working memory.
+- **EBS:** Provides block storage for operating systems and application data.
+- **Key Pair:** Supports secure login to instances, such as SSH access to Linux.
+- **Security Group:** Controls inbound and outbound network traffic.
+- **VPC and Subnet:** Provide the network environment for EC2 instances.
+
+## 2. EC2 Purchasing Options
+
+- **On-Demand Instances:** Pay for compute capacity without a long-term commitment.
+- **Spot Instances:** Use spare AWS capacity at discounted prices, with the risk of interruption.
+- **Reserved Instances:** Offer potential discounts through specific usage commitments.
+- **Savings Plans:** Provide discounted eligible compute usage in exchange for a usage commitment.
+- **Dedicated Instances:** Run on hardware dedicated to a single customer.
+- **Dedicated Hosts:** Provide dedicated physical servers with host-level visibility and control.
+
+### Spot Instances
+
+Spot Instances are useful for fault-tolerant workloads, batch processing, automated testing, and other tasks that can tolerate interruptions.
+
+Applications using Spot Instances should save progress, recover from interruptions, and use replacement capacity when necessary.
+
+**Key takeaway:** Instance families describe the computing resources available, while purchasing options determine how the compute capacity is obtained and priced.
+
+## 3. Amazon S3 (Simple Storage Service)
+
+Amazon S3 is an object storage service used to store and retrieve files, images, videos, backups, logs, and other data.
+
+### Regional vs Global Scope
+
+- S3 buckets are created in a specific AWS Region.
+- S3 bucket names are globally unique within an AWS partition.
+- Objects can be accessed according to bucket policies, IAM permissions, and other access controls.
+- S3 supports features such as versioning, lifecycle policies, replication, and storage classes.
+
+**Example:** Mumbai Region — `ap-south-1`.
+
+## 4. Application Server
+
+An application server runs application code and processes business logic. It can communicate with databases and other services to provide functionality to users.
+
+Example architecture:
+
+1. User or browser sends a request.
+2. Web server receives the request.
+3. Application server processes the business logic.
+4. Database stores or retrieves information.
+5. The result is returned to the user.
+
+An application server can run on an EC2 instance.
+
+## 5. Nginx vs IIS
+
+### Nginx
+
+- A web server and reverse proxy.
+- Commonly used for hosting websites and routing requests.
+- Runs on Linux and Windows.
+
+### IIS (Internet Information Services)
+
+- Microsoft's web server for Windows.
+- Integrates with Windows Server and ASP.NET applications.
+- Can be managed using IIS Manager and configuration files.
+
+Both can serve websites over HTTP and HTTPS.
+
+## 6. Networking Ports
+
+- **Port 80:** Standard port for HTTP.
+- **Port 443:** Standard port for HTTPS.
+- **Port 22:** Commonly used for SSH remote access to Linux servers.
+- **Port 3389:** Commonly used for RDP remote access to Windows servers.
+
+Port usage depends on the service configuration and network security rules, not simply on whether the operating system is Linux or Windows.
+
+## 7. Linux vs Windows EC2 Storage
+
+A common EC2 launch configuration may use:
+
+- **Linux:** 8 GiB root EBS volume.
+- **Windows:** 30 GiB root EBS volume.
+
+These are example default sizes, not mandatory requirements. The actual size depends on the AMI, launch settings, applications, updates, and workload.
+
+Linux server installations can require less disk space than Windows Server installations. Storage can be configured according to application requirements.
+
+**Important:** EBS storage capacity is different from RAM and CPU. Increasing disk capacity does not automatically increase memory or processing power.
+
+## Key Learnings
+
+- EC2 provides virtual computing capacity in AWS.
+- Different instance families are designed for different workloads.
+- Spot Instances reduce compute costs but can be interrupted.
+- S3 is Regional, while bucket names are globally unique within an AWS partition.
+- Application servers process business logic.
+- Nginx and IIS are web servers with different platform integrations.
+- HTTP and HTTPS commonly use ports 80 and 443, respectively.
+- Linux and Windows instances can have different default root storage sizes.
+- Security groups, IAM permissions, and networking configurations help control access to AWS resources.
+
+## Conclusion
+
+Today's learning improved my understanding of AWS compute services, storage, server architecture, and networking fundamentals. I also learned how to select suitable EC2 instance families and purchasing options based on workload requirements, cost, and availability.
+
+I will continue building my AWS knowledge through practical labs and hands-on cloud implementations.
