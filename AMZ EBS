@@ -1,0 +1,129 @@
+1. What is Amazon EBS?
+Amazon EBS (Elastic Block Store) is a block storage service provided by 
+AWS that gives EC2 instances persistent storage.
+
+In simple words, EBS is like an extra hard drive that you can attach to an EC2 virtual server.
+
+For example, when you launch an EC2 instance, you need storage for:
+- The operating system, such as Ubuntu or Windows.
+- Applications and software.
+- Files, logs, and databases.
+- Application data.
+EBS provides storage for these requirements.
+
+Real-world example: Think of EC2 as a laptop and EBS as its SSD or hard drive. 
+The EC2 instance uses the storage to run applications and save data.
+
+2. How does EBS work?.....
+
+                                EC2 Instance
+                        Ubuntu / Windows / Applications
+                                     .
+                                     .  
+                             Amazon EBS Volume
+                  Block storage for operating system and data
+
+The process works like this:
+1. Create an EBS volume in an Availability Zone.
+2. Attach the volume to a compatible EC2 instance in the same Availability Zone.
+3. Format and mount the volume if it is a new data volume.
+4. Store files, application data, or databases on it.
+5. Detach it when appropriate and attach it to another compatible instance if needed.
+
+
+3. Important EBS terminology
+    Term	                     Simple meaning
+  EBS Volume	            A virtual block storage drive
+  EC2 Instance	          A virtual server
+  Root Volume	            The volume containing the operating system
+  Data Volume	            Extra storage for files or applications
+  Snapshot	              A point-in-time backup of a volume
+  IOPS	                  Input/output operations per second
+  Throughput	            Amount of data transferred per second
+  Mounting	              Making a filesystem accessible in Linux
+  Formatting	            Preparing a storage device with a filesystem
+  Availability Zone	      A separate location within an AWS Region
+
+4. Types of EBS volumes
+Amazon EBS volumes are mainly divided into two categories: SSD-backed and HDD-backed volum
+es.
+
+A. SSD-backed volumes
+Designed for low latency and frequent random reads and writes.
+- gp3 — General Purpose SSD: Suitable for most workloads, including boot volumes, websites, and development servers.
+- gp2 — General Purpose SSD: An older general-purpose option, with performance tied to volume size.
+- io2 Block Express / io2 — Provisioned IOPS SSD: For demanding databases and applications needing high, predictable I/O performance.
+- io1 — Provisioned IOPS SSD: An older provisioned-IOPS option.
+
+B. HDD-backed volumes
+
+Designed for workloads where sequential throughput matters more than low latency.
+- st1 — Throughput Optimized HDD: Suitable for big data, streaming workloads, and large sequential file processing.
+- sc1 — Cold HDD: Lower-cost storage for infrequently accessed data.
+
+5. What is a root volume and a data volume?
+
+"Root volume"
+Contains the operating system required to boot the EC2 instance.
+Example: Ubuntu operating system stored on an 8 GiB EBS volume.
+
+"Data volume"
+Provides additional storage for application files, logs, databases, or uploads.
+Example: A 50 GiB EBS volume attached to store website files and database data.
+
+
+        6. EBS volume lifecycle
+                    1
+              Create volume
+Choose volume type, size and Availability Zone.
+                    2
+              Attach volume
+Connect it to a compatible EC2 instance.
+                    3
+            Format and mount
+Prepare the filesystem and access the disk.
+                    4
+              Store data
+Save application files, logs and other data.
+                    5
+          Snapshot or detach
+Back up the volume or detach it when safe.
+
+
+
+7. How to create an EBS volume in AWS
+Follow these steps in the AWS Management Console.
+1. Sign in to your AWS account.
+2. Open the EC2 service.
+3. Under Elastic Block Store, select Volumes.
+4. Click Create volume.
+5. Select the volume type, such as gp3.
+6. Enter the volume size, such as 10 GiB.
+7. Select the same Availability Zone as your target EC2 instance.
+8. Optionally configure IOPS, throughput, and encryption.
+9. Click Create volume.
+10. Select the new volume, then choose Actions → Attach volume.
+11. Select your EC2 instance and attach the volume.
+
+8. What is an EBS snapshot?
+An EBS snapshot is a point-in-time backup of an EBS volume stored and managed by AWS.
+
+For example, if your EC2 instance contains application files and a database on EBS, 
+a snapshot can help you restore that storage if something goes wrong.
+
+Common uses:
+- Backup and recovery.
+- Creating a new volume from a backup.
+- Copying backups across Regions.
+- Supporting disaster recovery.
+- Retaining a recovery point before major changes.
+A snapshot is not automatically a complete application backup. 
+For databases, coordinate backups with the database or application to ensure consistency. 
+Snapshots are incremental after the initial snapshot, meaning AWS stores only the changed blocks as needed.
+
+
+Conclusion
+This learning session helped me understand how AWS EBS works, how to create and attach volumes, 
+how to use additional storage in Ubuntu, and how snapshots support backup and recovery.
+
+#AWS #AmazonEBS #AWSCloud #EC2 #CloudComputing #Linux #DevOps #100DaysOfCloud
