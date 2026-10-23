@@ -1,0 +1,412 @@
+## 1. What Is VPC?
+
+Amazon Virtual Private Cloud (VPC) is an AWS service that allows us to create a logically isolated virtual network in the AWS Cloud.
+Inside a VPC, we can launch AWS resources such as EC2 instances, databases, and application servers. We can control their IP addresses, network connectivity, routing, and access permissions.
+**In simple words:** A VPC is like our own private network in AWS where we decide how our resources communicate with each other and the internet.
+
+### Real-World Example
+
+Imagine an office building:
+- **VPC:** The entire office building's private network.
+- **Subnet:** Different departments inside the building.
+- **EC2 instance:** A computer used by an employee.
+- **Route table:** Directions that decide where network traffic goes.
+- **Internet Gateway:** The connection between the office network and the internet.
+- **Security Group:** A security guard controlling traffic to and from an individual resource.
+
+## 2. Why Do We Use VPC?
+VPC is important because it helps us build secure and organized cloud infrastructure.
+
+Main purposes:
+1. **Network isolation:** Keep our AWS resources in a logically isolated network.
+2. **IP address management:** Assign private IP addresses and configure public IP addressing where needed.
+3. **Security:** Control network traffic using security groups and network ACLs.
+4. **Subnet creation:** Separate public-facing resources from private resources.
+5. **Internet connectivity:** Connect resources to the internet through appropriate gateways and routes.
+6. **Private communication:** Allow resources inside a VPC to communicate using private IP addresses when routing and security rules permit.
+7. **Hybrid connectivity:** Connect an AWS VPC to an on-premises network using VPN or AWS Direct Connect.
+8. **High availability:** Deploy resources across multiple Availability Zones.
+
+## 3. Important Components of VPC
+### A. CIDR Block
+CIDR stands for Classless Inter-Domain Routing. It represents a range of IP addresses assigned to a network.
+Example:
+`10.0.0.0/16`
+This VPC has 65,536 IPv4 addresses in its overall address range.
+Other examples:
+- `10.0.1.0/24` — 256 total IPv4 addresses.
+- `10.0.2.0/24` — 256 total IPv4 addresses.
+- `192.168.1.0/24` — 256 total IPv4 addresses.
+AWS reserves five IPv4 addresses in every IPv4 subnet, so a `/24` subnet normally provides 251 assignable IPv4 addresses.
+**Important:** A subnet must have a CIDR block that falls within the VPC's IPv4 address range.
+### B. Subnet
+A subnet is a smaller IP address range inside a VPC. Each subnet belongs to one Availability Zone.
+
+There are two common types:
+
+**Public Subnet**
+- Has a route to an Internet Gateway.
+- Can host internet-facing resources such as public web servers.
+- A resource also needs an appropriate public IPv4 address or another suitable internet-reachable addressing arrangement to communicate directly with the internet.
+
+**Private Subnet**
+- Does not have a direct route to an Internet Gateway.
+- Commonly hosts application servers, databases, and internal services.
+- Can access the internet for outbound IPv4 traffic through a NAT Gateway when configured appropriately.
+
+**Example:**
+
+- Public subnet: `10.0.1.0/24`
+- Private subnet: `10.0.2.0/24`
+
+### C. Route Table
+A route table contains rules that determine where network traffic is sent.
+Each route includes a destination CIDR or prefix and a target.
+
+Example:
+
+| Destination | Target | Purpose |
+|---|---|---|
+| `10.0.0.0/16` | Local | Communication within the VPC |
+| `0.0.0.0/0` | Internet Gateway | IPv4 traffic destined for other networks through the internet |
+
+A private subnet may instead use a NAT Gateway as the target of its default IPv4 route.
+
+Every subnet is associated with a route table, either explicitly or through the VPC's main route table.
+
+### D. Internet Gateway (IGW)
+
+An Internet Gateway enables communication between a VPC and the internet when the required routing, addressing, and security configuration is in place.
+
+Key points:
+
+- It is attached to a VPC.
+- It supports internet connectivity for appropriately configured resources.
+- A public subnet's route table typically includes `0.0.0.0/0` pointing to the IGW.
+- An IGW alone does not make every EC2 instance publicly accessible.
+
+### E. NAT Gateway
+
+NAT stands for Network Address Translation.
+
+A NAT Gateway allows resources in a private subnet to initiate connections to external networks, such as downloading software updates, 
+without allowing unsolicited internet connections to those resources through the NAT Gateway.
+
+Example:
+
+A private EC2 instance needs to download a Linux package. Its route table sends internet-bound IPv4 traffic to a NAT Gateway in a public subnet. 
+The NAT Gateway uses its public IP address for internet communication.
+
+Important points:
+
+- A public NAT Gateway is normally placed in a public subnet.
+- Its subnet must have a suitable route to an Internet Gateway.
+- Private subnet route tables must point to the NAT Gateway for outbound IPv4 internet access.
+- NAT Gateways have costs, including usage and data-processing charges.
+- A NAT Gateway is not a replacement for a security group or a firewall.
+
+### F. Security Group
+
+A security group acts as a virtual firewall for supported AWS resources, including EC2 network interfaces.
+
+It controls inbound and outbound traffic.
+
+Example inbound rules for a web server:
+
+| Type | Protocol | Port | Source |
+|---|---|---|---|
+| SSH | TCP | 22 | Your trusted public IP `/32` |
+| HTTP | TCP | 80 | `0.0.0.0/0` |
+| HTTPS | TCP | 443 | `0.0.0.0/0` |
+
+Key points:
+
+- Security groups are stateful.
+- Return traffic for an allowed connection is automatically permitted.
+- Security groups support allow rules; they do not have explicit deny rules.
+- Avoid allowing SSH from `0.0.0.0/0` unless there is a specific, justified requirement.
+
+### G. Network ACL (NACL)
+
+A Network Access Control List is a subnet-level network traffic filter.
+
+Key points:
+
+- NACLs are stateless.
+- They support both allow and deny rules.
+- Rules are evaluated in ascending rule-number order.
+- Inbound and outbound traffic are evaluated separately.
+- Return traffic must be allowed by the relevant rules.
+
+**Difference:** Security groups protect network interfaces at the resource level, while NACLs apply at the subnet level.
+
+### H. Elastic IP Address
+
+An Elastic IP is a static public IPv4 address allocated to your AWS account.
+
+It can be associated with supported AWS resources, such as an EC2 instance or a NAT Gateway.
+
+It is useful when you need a stable public IPv4 address. Elastic IPs can incur charges, so release unused addresses.
+
+### I. VPC Endpoints
+
+VPC endpoints allow private connectivity to supported AWS services without requiring traffic to use a public internet path.
+
+Common types include:
+
+- **Gateway endpoints:** Used for Amazon S3 and DynamoDB.
+- **Interface endpoints:** Use AWS PrivateLink to provide private connectivity to supported services.
+
+Example: An EC2 instance in a private subnet can access an S3 bucket through an S3 gateway endpoint without requiring a NAT Gateway for that S3 traffic, 
+provided routing and permissions are configured correctly.
+
+### J. VPC Peering
+
+VPC Peering connects two VPCs so that resources can communicate using private IP addresses, subject to routes and security rules.
+
+Important points:
+
+- VPC CIDR ranges must not overlap for standard VPC peering.
+- Routes must be configured in both directions as needed.
+- Security groups and NACLs must permit the traffic.
+- VPC peering does not provide transitive routing.
+
+### K. VPN and AWS Direct Connect
+
+**AWS Site-to-Site VPN:** Creates an encrypted connection between an on-premises network and an AWS VPC over a supported network connection.
+
+**AWS Direct Connect:** Provides a dedicated network connection between an organization and AWS. 
+It can offer more consistent network performance, but encryption is not automatic unless configured separately.
+These services are useful for hybrid cloud architectures.
+
+## 4. Types of VPC
+
+### Default VPC
+
+AWS creates a default VPC in each AWS Region when the account and Region support the default VPC setup.
+
+It is designed to make launching resources easier.
+
+Common characteristics include:
+- A default VPC CIDR block, commonly `172.31.0.0/16`.
+- Default subnets in Availability Zones.
+- An Internet Gateway.
+- A main route table.
+- Default networking settings that can provide internet access to appropriately configured resources.
+
+### Custom VPC
+
+A custom VPC is one that we create and configure according to our application requirements.
+
+We select the address ranges, create subnets, configure routes and gateways, and define security controls.
+
+**Example:** A company creates a custom VPC with separate public web servers, private application servers, and private database subnets.
+
+---
+
+## 5. How Does VPC Work?
+
+Consider an application with three layers:
+
+1. A public web server.
+2. A private application server.
+3. A private database server.
+
+The flow works as follows:
+
+1. A user sends a request to the website over HTTPS.
+2. Internet traffic reaches the public web server through the Internet Gateway and its public IPv4 address or other suitable public addressing.
+3. The web server communicates with the application server using private IP addresses.
+4. The application server queries the database over the VPC's private network.
+5. Security groups allow only the required connections, such as HTTPS to the web tier, application traffic to the app tier, and database traffic from the app tier.
+6. The response returns through the established network connections.
+
+The database does not need to be publicly accessible.
+
+This architecture helps reduce the exposure of sensitive resources.
+
+---
+
+## 6. Example VPC Architecture
+
+Suppose we create the following network:
+
+**VPC CIDR:** `10.0.0.0/16`
+
+| Component | CIDR / Address | Purpose |
+|---                  |---             |---                               |
+| VPC                 | `10.0.0.0/16`  | Main virtual network             |
+| Public Subnet A     | `10.0.1.0/24`  | Public web server                |
+| Public Subnet B     | `10.0.2.0/24`  | High availability                |
+| Private Subnet A    | `10.0.11.0/24` | Application server               |
+| Private Subnet B    | `10.0.12.0/24` | Application server in another AZ |
+| Database Subnet A   | `10.0.21.0/24` | Private database                 |
+| Database Subnet B   | `10.0.22.0/24` | Database high availability       |
+
+A production design may place subnets across at least two Availability Zones to improve resilience.
+
+**Architecture flow:**
+
+Internet → Internet Gateway → Public Web Tier → Private Application Tier → Private Database Tier
+
+Private outbound IPv4 traffic may use a NAT Gateway when needed. Private AWS service access can use VPC endpoints where appropriate.
+
+---
+
+## 7. Steps to Create a Custom VPC in AWS
+
+### Step 1: Open the VPC Console
+
+1. Sign in to the AWS Management Console.
+2. Search for **VPC**.
+3. Open the Amazon VPC service.
+4. Select **Your VPCs**.
+
+### Step 2: Create a VPC
+
+1. Select **Create VPC**.
+2. Choose **VPC only** if you want to create and configure the components individually.
+3. Enter a name, such as `Learning-VPC`.
+4. Set the IPv4 CIDR to `10.0.0.0/16`.
+5. Select the tenancy option appropriate to your requirements.
+6. Click **Create VPC**.
+
+### Step 3: Create Subnets
+
+1. Open **Subnets**.
+2. Select **Create subnet**.
+3. Choose `Learning-VPC`.
+4. Create a public subnet using `10.0.1.0/24`.
+5. Create a private subnet using `10.0.11.0/24`.
+6. Select the appropriate Availability Zones.
+
+### Step 4: Create an Internet Gateway
+
+1. Open **Internet Gateways**.
+2. Select **Create internet gateway**.
+3. Name it `Learning-IGW`.
+4. Create the gateway.
+5. Select **Attach to a VPC**.
+6. Attach it to `Learning-VPC`.
+
+### Step 5: Configure the Public Route Table
+
+1. Open **Route Tables**.
+2. Create or select a route table associated with the VPC.
+3. Add a route:
+   - Destination: `0.0.0.0/0`
+   - Target: `Learning-IGW`
+4. Associate the route table with the public subnet.
+
+### Step 6: Configure Public IP Assignment
+
+Enable automatic public IPv4 address assignment on the public subnet if appropriate, or assign a public IPv4 address to the instance using a supported method.
+
+A public route alone is not enough to make an EC2 instance reachable from the internet.
+
+### Step 7: Configure the Private Subnet
+
+Keep the private subnet without a direct default route to the Internet Gateway.
+
+If private instances need outbound internet access, create a NAT Gateway in a public subnet, allocate an Elastic IP as required, and add a private-subnet route such as `0.0.0.0/0` pointing to the NAT Gateway.
+
+### Step 8: Configure Security
+
+Create suitable security group rules for the application.
+
+For a web server, allow HTTPS from the intended users. Allow SSH only from your trusted IP if SSH access is required.
+
+### Step 9: Launch an EC2 Instance
+
+Launch an EC2 instance into the intended subnet and select the correct security group.
+
+Verify that the instance has the necessary addressing, routes, and permissions.
+
+### Step 10: Test Connectivity
+
+- Check the VPC and subnet configuration.
+- Verify route-table associations.
+- Check the Internet Gateway or NAT Gateway routes.
+- Verify security group and NACL rules.
+- Test connectivity using an appropriate method, such as SSH or HTTPS.
+- Check VPC Flow Logs if traffic is not behaving as expected.
+
+---
+
+## 8. VPC Security Best Practices
+
+1. Keep databases in private subnets.
+2. Do not expose SSH or RDP to the entire internet without a justified need.
+3. Follow the principle of least privilege for security group rules.
+4. Use VPC endpoints to access supported AWS services privately when suitable.
+5. Enable VPC Flow Logs for network troubleshooting and monitoring.
+6. Use multiple Availability Zones for important workloads.
+7. Review unused Elastic IPs, gateways, endpoints, and other billable resources.
+8. Plan IP address ranges carefully to avoid overlap with other VPCs or on-premises networks.
+9. Use Systems Manager Session Manager or another controlled administrative access method where appropriate.
+10. Monitor network configuration and review access rules regularly.
+
+---
+
+## 9. Common VPC Problems and Solutions
+
+| Problem                                   | Possible Solution                                                                    |
+|---                                        |---                                                                                   |
+| EC2 cannot access the internet            | Check the route table, gateway, public IP, security group, and NACL                  |
+| SSH connection fails                      | Check the key pair, username, security group port 22, public IP, and routing         |
+| Private instance cannot download packages | Check the NAT Gateway, its route to the IGW, and the private route table             |
+| Two instances cannot communicate          | Check routes, security groups, NACLs, and IP addressing                              |
+| VPC peering is not working                | Check the peering status, both route tables, security rules, and overlapping CIDRs   |
+| S3 access fails from a private subnet     | Check the endpoint, route configuration, IAM permissions, and bucket policy          |
+| Unexpected AWS networking charges         | Review NAT Gateway usage, data transfer, public IPv4 addresses, and unused resources |
+
+---
+
+## 10. Important Differences
+
+### Security Group vs Network ACL
+
+| Feature          | Security Group                                  | Network ACL                             |
+|---               |---                                              |---                                      |
+| Level            | Resource/network interface                      | Subnet                                  |
+| Stateful         | Yes                                             | No                                      |
+| Allow rules      | Yes                                             | Yes                                     |
+| Deny rules       | No explicit deny rules                          | Yes                                     |
+| Rule evaluation  | All applicable rules                            | Rules evaluated by number               |
+| Return traffic   | Automatically permitted for tracked connections | Must be permitted by the relevant rules |
+
+### Public Subnet vs Private Subnet
+
+| Feature                     | Public Subnet                   | Private Subnet                              |
+|---                          |---                              |---                                          |
+| Direct route to IGW         | Normally yes                    | Normally no                                 |
+| Internet-facing resources   | Commonly used                   | Generally avoided                           |
+| Public IP                   | May be used                     | Usually unnecessary                         |
+| NAT Gateway                 | Can host a public NAT Gateway   | Can route outbound IPv4 traffic through NAT |
+| Common workloads            | Public web tier, load balancer  | App servers, internal services, databases   |
+
+## 11. Key Terms to Remember
+
+- **VPC:** An isolated virtual network in AWS.
+- **CIDR:** A notation used to represent an IP address range.
+- **Subnet:** A smaller IP address range inside a VPC.
+- **Route Table:** Determines where network traffic goes.
+- **Internet Gateway:** Enables internet connectivity for appropriately configured VPC resources.
+- **NAT Gateway:** Enables outbound connections from private subnets.
+- **Security Group:** A stateful firewall for network interfaces.
+- **NACL:** A stateless subnet-level traffic filter.
+- **Elastic IP:** A static public IPv4 address.
+- **VPC Endpoint:** Provides private connectivity to supported AWS services.
+- **VPC Peering:** Connects two VPCs for private IP communication.
+- **VPC Flow Logs:** Capture information about IP traffic to and from network interfaces, subnets, or VPCs.
+
+## 12. What I Learned Today
+
+Today, I studied Amazon Virtual Private Cloud (VPC) and understood how networking works inside AWS. I learned how to create a custom VPC, define CIDR ranges, create public and private subnets, configure route tables, and connect a VPC to the internet using an Internet Gateway.
+I also learned the roles of NAT Gateways, security groups, network ACLs, Elastic IP addresses, VPC endpoints, and VPC peering. I understood why private subnets are useful for application servers and databases and how routing and security rules control communication between network resources.
+This knowledge helps me understand how to design secure, scalable, and highly available AWS networking environments.
+
+## 13. Conclusion
+
+Amazon VPC is one of the most important AWS networking services. It provides control over IP addressing, subnet design, routing, connectivity, and network security.
+Understanding VPC is essential for working with EC2, S3, RDS, load balancers, and other AWS services. A well-designed VPC helps build a secure and reliable cloud environment.
